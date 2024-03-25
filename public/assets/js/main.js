@@ -7,26 +7,6 @@ let currentPage = 1;
 const recordsPerPage = 10;
 let totalPages = 0;
 
-
-// Función para cargar los deportes registrados
-// function loadSports() {
-//   axios.get('/api/sports')
-//     .then(response => {
-//       const sports = response.data;
-//       sportsTableBody.innerHTML = ''; // Limpiar la tabla
-//       sports.forEach((sport, index) => {
-//         const row = document.createElement('tr');
-//         row.innerHTML = `
-//           <th scope="row">${index + 1}</th>
-//           <td>${sport.name}</td>
-//           <td>${sport.price}</td>
-//           <td>
-//             <button class="btn btn-warning btn-sm update-btn" data-id="${sport.id}">Actualizar</button>
-//             <button class="btn btn-danger btn-sm delete-btn" data-id="${sport.id}">Eliminar</button>
-//           </td>
-//         `;
-//         sportsTableBody.appendChild(row);
-//       });
 function loadSports() {
   axios.get(`/api/sports?page=${currentPage}&limit=${recordsPerPage}`)
     .then(response => {
@@ -34,12 +14,11 @@ function loadSports() {
       const totalRecords = response.data.total;
       totalPages = Math.ceil(totalRecords / recordsPerPage);
       sportsTableBody.innerHTML = '';
-      console.log(sports);
-      sports.forEach((sport, index) => {
+      sports.forEach(sport => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <th scope="row">${index + 1}</th>
-          <td >${sport.name}</td>
+          <th scope="row">${sport.id}</th>
+          <td>${sport.name}</td>
           <td>${sport.price}</td>
           <td>
             <button class="btn btn-warning btn-sm update-btn" data-id="${sport.id}">Actualizar</button>
@@ -48,6 +27,7 @@ function loadSports() {
         `;
         sportsTableBody.appendChild(row);
       });
+
 
       // Agregar event listeners después de construir la tabla
       document.querySelectorAll('.delete-btn').forEach(button => {
@@ -184,3 +164,68 @@ function deleteSport(id) {
 
 // Cargar deportes al iniciar
 window.onload = loadSports;
+
+
+
+
+const nameInput = document.getElementById('namefilter');
+const iconSpan = document.getElementById('validationIcon'); // Asegúrate de agregar este elemento en tu HTML
+
+nameInput.addEventListener('input', (e) => {
+  const searchValue = e.target.value.toLowerCase();
+
+  // Solo realiza la búsqueda si searchValue no está vacío
+  if (searchValue) {
+    // Realiza una solicitud al servidor para obtener los deportes filtrados
+    axios.get(`/api/sports/search?name=${searchValue}`)
+      .then(response => {
+        const matchingSports = response.data;
+
+        // Actualiza la tabla con los resultados de la búsqueda
+        updateTableWithSearchResults(matchingSports);
+
+        // Decide qué icono mostrar
+        if (matchingSports.length === 0) {
+          iconSpan.innerHTML = '<i class="bi bi-x-circle-fill" style="color: red;"></i>'; // No hay coincidencias
+        } else {
+          iconSpan.innerHTML = '<i class="bi bi-check-circle-fill" style="color: green;"></i>'; // Coincidencias encontradas
+        }
+      })
+      .catch(error => console.error(error));
+  } else {
+    // Si el campo de búsqueda está vacío, vuelve a cargar todos los deportes y quita el icono
+    loadSports();
+    iconSpan.innerHTML = ''; // Quita el icono
+  }
+});
+
+function updateTableWithSearchResults(matchingSports) {
+  sportsTableBody.innerHTML = ''; // Limpiar la tabla antes de agregar los resultados de búsqueda
+  matchingSports.forEach((sport) => {
+    // El resto del código para agregar las filas a la tabla
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <th scope="row">${sport.id}</th>
+      <td>${sport.name}</td>
+      <td>${sport.price}</td>
+      <td>
+        <button class="btn btn-warning btn-sm update-btn" data-id="${sport.id}">Actualizar</button>
+        <button class="btn btn-danger btn-sm delete-btn" data-id="${sport.id}">Eliminar</button>
+      </td>
+    `;
+    sportsTableBody.appendChild(row);
+  });
+}
+
+function updateValidationIcon(matchingSports, searchValue) {
+  const iconSpan = document.getElementById('validationIcon');
+
+  if (searchValue && matchingSports.length === 0) {
+    iconSpan.innerHTML = '<i class="bi bi-x-circle-fill" style="color: red;"></i>';
+  } else if (searchValue) {
+    const exactMatch = matchingSports.some(sport => sport.name.toLowerCase() === searchValue.toLowerCase());
+    iconSpan.innerHTML = exactMatch ? '<i class="bi bi-check-circle-fill" style="color: green;"></i>' : '';
+  } else {
+    iconSpan.innerHTML = '';
+  }
+}

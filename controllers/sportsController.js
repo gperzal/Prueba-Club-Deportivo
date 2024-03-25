@@ -75,3 +75,12 @@ exports.deleteSport = (req, res) => {
         res.status(404).send({ message: 'Deporte no encontrado' });
     }
 };
+
+
+
+exports.searchSportsByName = (req, res) => {
+    const { name } = req.query;
+    const sports = readSportsFile();
+    const filteredSports = name ? sports.filter(sport => sport.name.toLowerCase().includes(name.toLowerCase())) : sports;
+    res.json(filteredSports);
+};

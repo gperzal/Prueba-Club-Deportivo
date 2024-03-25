@@ -7,4 +7,8 @@ router.get('/', sportsController.getAllSports);
 router.put('/:id', sportsController.updateSportPrice);
 router.delete('/:id', sportsController.deleteSport);
 
+router.get('/search', sportsController.searchSportsByName);
+
+
+
 module.exports = router;
