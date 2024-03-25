@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "name": "Fútbol",
+    "name": "Futbol",
     "price": "10000"
   },
   {
@@ -16,7 +16,7 @@
   },
   {
     "id": 4,
-    "name": "Críquet",
+    "name": "Criquet",
     "price": 5000
   },
   {
@@ -26,7 +26,7 @@
   },
   {
     "id": 6,
-    "name": "Natación",
+    "name": "Natacion",
     "price": 6000
   },
   {
@@ -61,7 +61,7 @@
   },
   {
     "id": 13,
-    "name": "Hockey sobre césped",
+    "name": "Hockey sobre cesped",
     "price": 5700
   },
   {
@@ -71,7 +71,7 @@
   },
   {
     "id": 15,
-    "name": "Esquí",
+    "name": "Esqui",
     "price": 6300
   },
   {
@@ -91,7 +91,7 @@
   },
   {
     "id": 19,
-    "name": "Béisbol",
+    "name": "Beisbol",
     "price": 8000
   },
   {
@@ -101,7 +101,7 @@
   },
   {
     "id": 21,
-    "name": "Fútbol Americano",
+    "name": "Futbol Americano",
     "price": 9500
   },
   {
@@ -136,12 +136,12 @@
   },
   {
     "id": 28,
-    "name": "Equitación",
+    "name": "Equitacion",
     "price": 7100
   },
   {
     "id": 29,
-    "name": "Bádminton",
+    "name": "Badminton",
     "price": 5300
   },
   {
@@ -171,7 +171,7 @@
   },
   {
     "id": 35,
-    "name": "Espeleología",
+    "name": "Espeleologia",
     "price": 3800
   },
   {
@@ -206,7 +206,7 @@
   },
   {
     "id": 42,
-    "name": "Triatlón",
+    "name": "Triatlon",
     "price": 4900
   },
   {
@@ -216,7 +216,7 @@
   },
   {
     "id": 44,
-    "name": "Polo acuático",
+    "name": "Polo acuatico",
     "price": 3600
   },
   {

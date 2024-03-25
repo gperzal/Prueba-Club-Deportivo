@@ -10,8 +10,6 @@ body {
     color: white;
     font-family: Arial, Helvetica, sans-serif solid;
     
-  
- 
 }
 
 
@@ -25,4 +23,12 @@ body {
 
 .btn {
     margin-right: 5px;
+}
+
+h1, h2, label, button, .form-label {
+    filter: drop-shadow( 1px 1px 1px black ) drop-shadow( 1px 1px 1px black );
+}
+
+button {
+   width: 80px;
 }

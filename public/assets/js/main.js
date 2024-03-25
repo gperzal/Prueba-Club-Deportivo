@@ -21,7 +21,7 @@ function loadSports() {
           <td>${sport.name}</td>
           <td>${sport.price}</td>
           <td>
-            <button class="btn btn-warning btn-sm update-btn" data-id="${sport.id}">Actualizar</button>
+            <button class="btn btn-info btn-sm update-btn" data-id="${sport.id}">Actualizar</button>
             <button class="btn btn-danger btn-sm delete-btn" data-id="${sport.id}">Eliminar</button>
           </td>
         `;
@@ -169,7 +169,20 @@ window.onload = loadSports;
 
 
 const nameInput = document.getElementById('namefilter');
+const nameSport = document.getElementById('name');
 const iconSpan = document.getElementById('validationIcon'); // Asegúrate de agregar este elemento en tu HTML
+const validationRegex = /^[A-Za-z]+$/;
+
+
+nameSport.addEventListener('input', function (e) {
+  const currentValue = e.target.value;
+
+  // Elimina caracteres que no coincidan con la expresión regular
+  if (!validationRegex.test(currentValue)) {
+    e.target.value = currentValue.replace(/[^A-Za-z]+/g, '');
+  }
+});
+
 
 nameInput.addEventListener('input', (e) => {
   const searchValue = e.target.value.toLowerCase();
