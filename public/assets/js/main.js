@@ -169,18 +169,13 @@ window.onload = loadSports;
 
 
 const nameInput = document.getElementById('namefilter');
-const nameSport = document.getElementById('name');
+
 const iconSpan = document.getElementById('validationIcon'); // Asegúrate de agregar este elemento en tu HTML
-const validationRegex = /^[A-Za-z]+$/;
 
 
-nameSport.addEventListener('input', function (e) {
-  const currentValue = e.target.value;
-
-  // Elimina caracteres que no coincidan con la expresión regular
-  if (!validationRegex.test(currentValue)) {
-    e.target.value = currentValue.replace(/[^A-Za-z]+/g, '');
-  }
+// Elimina caracteres que no coincidan con la expresión regular
+document.getElementById('name').addEventListener('input', function (e) {
+  this.value = this.value.replace(/[^A-Za-z]/g, '');
 });
 
 
@@ -242,3 +237,6 @@ function updateValidationIcon(matchingSports, searchValue) {
     iconSpan.innerHTML = '';
   }
 }
+
+
+
