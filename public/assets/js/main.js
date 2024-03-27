@@ -140,15 +140,24 @@ document.getElementById('saveChanges').addEventListener('click', function () {
 
 
 // Función para agregar un nuevo deporte
+// Modifica esta función para usar getLowestAvailableId
 form.addEventListener('submit', function (event) {
   event.preventDefault();
-  const name = document.getElementById('name').value;
-  const price = document.getElementById('price').value;
 
-  axios.post('/api/sports', { name, price })
+  // Obtiene la lista actual de deportes del servidor para buscar la ID más baja disponible.
+  axios.get(`/api/sports`)
+    .then(response => {
+      const sports = response.data.sports;
+      const newId = getLowestAvailableId(sports); // Encuentra la ID más baja disponible
+      const name = document.getElementById('name').value;
+      const price = document.getElementById('price').value;
+
+      // Enviar la nueva ID junto con el nombre y el precio a la API
+      return axios.post('/api/sports', { id: newId, name, price });
+    })
     .then(() => {
       form.reset(); // Resetea el formulario
-      loadSports(); // Recarga la tabla
+      loadSports(); // Recarga la tabla para mostrar los datos actualizados
     })
     .catch(error => console.error(error));
 });
@@ -239,4 +248,14 @@ function updateValidationIcon(matchingSports, searchValue) {
 }
 
 
-
+function getLowestAvailableId(sports) {
+  const sortedIds = sports.map(sport => sport.id).sort((a, b) => a - b);
+  let lowestId = 1;
+  for (let i = 0; i < sortedIds.length; i++) {
+    if (sortedIds[i] !== lowestId) {
+      break;
+    }
+    lowestId++;
+  }
+  return lowestId;
+}

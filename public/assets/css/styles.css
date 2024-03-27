@@ -1,13 +1,12 @@
-html, body {
-    height: 100%;
-    margin: 0;
+body, html {
+    min-height: 100vh;
 }
 
 body {
     background-image: url('../img/bg1.jpg');
     background-size: cover;
     background-repeat: no-repeat;
-    min-height: 100vh; /* Asegúrate de que el body cubra toda la altura de la ventana */
+    background-attachment: scroll; 
     color: white;
 }
 
@@ -31,3 +30,6 @@ h1, h2, label, button, .form-label {
 button {
    width: 80px;
 }
+
+
+
