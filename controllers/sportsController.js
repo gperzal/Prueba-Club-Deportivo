@@ -11,31 +11,43 @@ const writeSportsFile = (data) => {
     fs.writeFileSync(sportsFilePath, JSON.stringify(data, null, 2));
 };
 
+
 exports.createSport = (req, res) => {
     const { name, price } = req.body;
     const sports = readSportsFile();
-    const newSport = { id: sports.length + 1, name, price };
+
+    // Crear un arreglo con todos los IDs existentes
+    const existingIds = sports.map(sport => sport.id);
+
+    // Encontrar el primer ID no utilizado
+    let newId = 1;
+    while (existingIds.includes(newId)) {
+        newId++;
+    }
+
+    // Crear el nuevo deporte con el ID encontrado
+    const newSport = { id: newId, name, price };
+
+    // Agregar el nuevo deporte al arreglo y escribir en el archivo
     sports.push(newSport);
     writeSportsFile(sports);
+
     res.status(201).send(newSport);
 };
 
 
-// Función para obtener todos los deportes
-// exports.getAllSports = (req, res) => {
-//     const sports = readSportsFile();
-//     res.status(200).json(sports);
-// };
-
 exports.getAllSports = (req, res) => {
     const { page = 1, limit = 10 } = req.query;
-    const sports = readSportsFile();
+    let sports = readSportsFile();
+
+    // Ordenar los deportes por ID de forma ascendente antes de la paginación
+    sports.sort((a, b) => a.id - b.id);
 
     // Calcular el inicio y final de los deportes que queremos mostrar en la página actual
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    // Crear una respuesta paginada
+    // Crear una respuesta paginada con los deportes ya ordenados
     const paginatedSports = sports.slice(startIndex, endIndex);
 
     res.status(200).json({

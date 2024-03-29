@@ -10,8 +10,12 @@ let totalPages = 0;
 function loadSports() {
   axios.get(`/api/sports?page=${currentPage}&limit=${recordsPerPage}`)
     .then(response => {
-      const sports = response.data.sports || [];
+      let sports = response.data.sports || [];
       const totalRecords = response.data.total;
+
+      // Ordenar los deportes por ID de forma ascendente
+      sports = sports.sort((a, b) => a.id - b.id);
+
       totalPages = Math.ceil(totalRecords / recordsPerPage);
       sportsTableBody.innerHTML = '';
       sports.forEach(sport => {
@@ -27,7 +31,6 @@ function loadSports() {
         `;
         sportsTableBody.appendChild(row);
       });
-
 
       // Agregar event listeners después de construir la tabla
       document.querySelectorAll('.delete-btn').forEach(button => {
@@ -49,8 +52,6 @@ function loadSports() {
     })
     .catch(error => console.error(error));
 }
-
-
 
 
 
@@ -144,23 +145,17 @@ document.getElementById('saveChanges').addEventListener('click', function () {
 form.addEventListener('submit', function (event) {
   event.preventDefault();
 
-  // Obtiene la lista actual de deportes del servidor para buscar la ID más baja disponible.
-  axios.get(`/api/sports`)
-    .then(response => {
-      const sports = response.data.sports;
-      const newId = getLowestAvailableId(sports); // Encuentra la ID más baja disponible
-      const name = document.getElementById('name').value;
-      const price = document.getElementById('price').value;
+  const name = document.getElementById('name').value;
+  const price = document.getElementById('price').value;
 
-      // Enviar la nueva ID junto con el nombre y el precio a la API
-      return axios.post('/api/sports', { id: newId, name, price });
-    })
+  // Enviar directamente el nuevo deporte sin ID al servidor
+  axios.post('/api/sports', { name, price })
     .then(() => {
       form.reset(); // Resetea el formulario
       loadSports(); // Recarga la tabla para mostrar los datos actualizados
     })
     .catch(error => console.error(error));
-});
+})
 
 // Función para eliminar un deporte
 function deleteSport(id) {
@@ -173,9 +168,6 @@ function deleteSport(id) {
 
 // Cargar deportes al iniciar
 window.onload = loadSports;
-
-
-
 
 const nameInput = document.getElementById('namefilter');
 
@@ -247,15 +239,3 @@ function updateValidationIcon(matchingSports, searchValue) {
   }
 }
 
-
-function getLowestAvailableId(sports) {
-  const sortedIds = sports.map(sport => sport.id).sort((a, b) => a - b);
-  let lowestId = 1;
-  for (let i = 0; i < sortedIds.length; i++) {
-    if (sortedIds[i] !== lowestId) {
-      break;
-    }
-    lowestId++;
-  }
-  return lowestId;
-}
